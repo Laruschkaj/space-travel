@@ -1,5 +1,171 @@
 /* src/pages/SpacecraftsPage/SpacecraftsPage.module.css */
 .spacecraftsPage {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
+}
+
+.spacecraftsPage__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.spacecraftsPage__title {
+    font-size: 2.5rem;
+    color: #61dafb;
+    margin: 0;
+}
+
+/* Updated button styles with blue colors */
+.spacecraftsPage__button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.spacecraftsPage__button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.spacecraftsPage__button:active {
+    transform: translateY(0);
+}
+
+.spacecraftsPage__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* No data message */
+.spacecraftsPage__noData {
+    grid-column: 1 / -1;
     text-align: center;
+    font-size: 1.2rem;
+    color: #b0b0b0;
+    margin-top: 5rem;
+}
+
+/* Loading & Error Styles */
+.loadingContainer,
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    text-align: center;
+}
+
+.loadingSpinner {
+    border: 4px solid #333;
+    border-top: 4px solid #61dafb;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.errorTitle {
+    color: #e53935;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+    color: #b0b0b0;
+}
+
+/* --- Modal Styles --- */
+.modalOverlay,
+.messageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal,
+.messageModal {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    text-align: center;
+}
+
+.modalText,
+.messageText {
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.confirmButton,
+.cancelButton,
+.messageButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.confirmButton {
+    background-color: #e53935;
+    color: white;
+}
+
+.confirmButton:hover {
+    background-color: #c62828;
+}
+
+.cancelButton,
+.messageButton {
+    background-color: #444;
+    color: white;
+}
+
+.cancelButton:hover,
+.messageButton:hover {
+    background-color: #666;
 }

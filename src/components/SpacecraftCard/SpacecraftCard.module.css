@@ -1,0 +1,88 @@
+/* src/components/SpacecraftCard/SpacecraftCard.module.css */
+.card__link {
+    text-decoration: none;
+    /* Remove underline from Link */
+    color: inherit;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: #1c1c1c;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+}
+
+.card__imageContainer {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-bottom: 2px solid #333;
+}
+
+.card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card__image {
+    transform: scale(1.05);
+}
+
+.card__content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card__title {
+    font-size: 1.5rem;
+    color: #61dafb;
+    margin: 0 0 1rem;
+}
+
+.card__detail {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin: 0.5rem 0;
+}
+
+.card__detailValue {
+    color: #f0f0f0;
+    font-weight: 500;
+}
+
+.card__decommissionButton {
+    margin-top: auto;
+    /* Push button to the bottom of the card */
+    padding: 0.75rem 1.5rem;
+    background-color: #e53935;
+    /* Red color for decommissioning */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.card__decommissionButton:hover {
+    background-color: #c62828;
+    transform: translateY(-2px);
+}
+
+.card__decommissionButton:active {
+    transform: translateY(0);
+}
