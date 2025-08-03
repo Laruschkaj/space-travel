@@ -6,49 +6,49 @@ class SpaceTravelMockApi {
       {
         id: 0,
         name: "Mercury",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/8/88/Reprocessed_Mariner_10_image_of_Mercury.jpg"
       },
       {
         id: 1,
         name: "Venus",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Venus_globe.jpg/800px-Venus_globe.jpg"
       },
       {
         id: 2,
         name: "Earth",
-        currentPopulation: 100000,
+        currentPopulation: 10000, // FIXED: Only Earth starts with population (matches Prispax capacity)
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/800px-The_Blue_Marble_%28remastered%29.jpg"
       },
       {
         id: 3,
         name: "Mars",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/OSIRIS_Mars_true_color.jpg/800px-OSIRIS_Mars_true_color.jpg"
       },
       {
         id: 4,
         name: "Jupiter",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019.png/800px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019.png"
       },
       {
         id: 5,
         name: "Saturn",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/8423_20181_1saturn2016.jpg/1920px-8423_20181_1saturn2016.jpg"
       },
       {
         id: 6,
         name: "Uranus",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Uranus_as_seen_by_NASA%27s_Voyager_2_%28remastered%29_-_JPEG_converted.jpg/800px-Uranus_as_seen_by_NASA%27s_Voyager_2_%28remastered%29_-_JPEG_converted.jpg"
       },
       {
         id: 7,
         name: "Neptune",
-        currentPopulation: 0,
+        currentPopulation: 0, // FIXED: Start with 0
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/0/06/Neptune.jpg"
       }
     ],
@@ -159,6 +159,13 @@ class SpaceTravelMockApi {
       const spacecraft = { id: nanoid(), name, capacity, description, pictureUrl, currentLocation: 2 };
 
       const mockDb = SpaceTravelMockApi.getMockDb();
+
+      // FIXED: Add the spacecraft's capacity to Earth's population when created
+      const earthPlanet = mockDb.planets.find(p => p.id === 2);
+      if (earthPlanet) {
+        earthPlanet.currentPopulation += capacity;
+      }
+
       mockDb.spacecrafts.push(spacecraft);
       SpaceTravelMockApi.setMockDb(mockDb);
       response.data = spacecraft;
@@ -177,10 +184,21 @@ class SpaceTravelMockApi {
 
     try {
       const mockDb = SpaceTravelMockApi.getMockDb();
-      const initialLength = mockDb.spacecrafts.length;
-      mockDb.spacecrafts = mockDb.spacecrafts.filter(sc => sc.id !== id);
+      const spacecraft = mockDb.spacecrafts.find(sc => sc.id === id);
 
-      if (mockDb.spacecrafts.length < initialLength) {
+      if (spacecraft) {
+        // FIXED: Remove the spacecraft's capacity from its current planet's population
+        const currentPlanet = mockDb.planets.find(p => p.id === spacecraft.currentLocation);
+        if (currentPlanet) {
+          currentPlanet.currentPopulation -= spacecraft.capacity;
+          // Ensure population doesn't go below 0
+          if (currentPlanet.currentPopulation < 0) {
+            currentPlanet.currentPopulation = 0;
+          }
+        }
+
+        // Remove the spacecraft
+        mockDb.spacecrafts = mockDb.spacecrafts.filter(sc => sc.id !== id);
         SpaceTravelMockApi.setMockDb(mockDb);
         response.data = 'Spacecraft decommissioned.';
       } else {
@@ -214,11 +232,17 @@ class SpaceTravelMockApi {
         throw new Error("The spacecraft is already on this planet!");
       }
 
-      let transferredCapacity = Math.min(spacecraft.capacity, sourcePlanet.currentPopulation);
+      // FIXED: Transfer the spacecraft's capacity (not limited by current population)
+      let transferredCapacity = spacecraft.capacity;
 
       sourcePlanet.currentPopulation -= transferredCapacity;
       targetPlanet.currentPopulation += transferredCapacity;
       spacecraft.currentLocation = targetPlanetId;
+
+      // Ensure populations don't go below 0
+      if (sourcePlanet.currentPopulation < 0) {
+        sourcePlanet.currentPopulation = 0;
+      }
 
       SpaceTravelMockApi.setMockDb(mockDb);
       response.data = 'Spacecraft dispatched successfully.';

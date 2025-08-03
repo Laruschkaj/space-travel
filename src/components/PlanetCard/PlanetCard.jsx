@@ -1,7 +1,3 @@
-
-
-/* --- Components --- */
-// src/components/PlanetCard/PlanetCard.jsx
 import React, { useState } from 'react';
 import styles from './PlanetCard.module.css';
 

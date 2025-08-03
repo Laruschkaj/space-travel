@@ -4,43 +4,6 @@
     flex-direction: column;
 }
 
-.header {
-    background-color: var(--card-bg-color);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    padding: 0 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.navList {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    justify-content: center;
-}
-
-.navItem {
-    margin: 0 15px;
-}
-
-.navLink {
-    color: var(--text-color);
-    font-size: 1.1rem;
-    font-weight: 600;
-    padding: 20px 0;
-    display: block;
-    border-bottom: 3px solid transparent;
-    transition: color 0.3s ease, border-bottom 0.3s ease;
-}
-
-.navLink:hover,
-.navLink.active {
-    color: var(--primary-color);
-    border-bottom: 3px solid var(--primary-color);
-}
-
 .mainContent {
     flex-grow: 1;
     padding: 20px;

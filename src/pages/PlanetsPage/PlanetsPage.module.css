@@ -9,13 +9,171 @@
     font-size: 2.5rem;
     color: #61dafb;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
-.planetsPage__list {
+.instructions {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+.instructions p {
+    margin: 0;
+    color: #e0e0e0;
+    font-size: 1.1rem;
+}
+
+.clearButton {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.clearButton:hover {
+    background-color: #888;
+}
+
+.planetsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
+}
+
+.planetCard {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.planetCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.planetClickable {
+    cursor: pointer;
+    border-color: #61dafb !important;
+}
+
+.planetClickable:hover {
+    border-color: #a4eaff !important;
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(97, 218, 251, 0.3);
+}
+
+.planetImageContainer {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.planetImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.planetCard:hover .planetImage {
+    transform: scale(1.05);
+}
+
+.planetOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 1.5rem 1rem 1rem;
+    color: white;
+}
+
+.planetName {
+    font-size: 1.8rem;
+    color: #61dafb;
+    margin: 0 0 0.5rem 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.planetPopulation {
+    font-size: 1rem;
+    color: #e0e0e0;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.spacecraftsSection {
+    padding: 1.5rem;
+}
+
+.spacecraftsTitle {
+    font-size: 1.2rem;
+    color: #61dafb;
+    margin: 0 0 1rem 0;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+.spacecraftsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.spacecraftItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.spacecraftItem:hover {
+    background-color: #3a3a3a;
+    transform: translateX(5px);
+}
+
+.selectedSpacecraft {
+    border-color: #61dafb !important;
+    background-color: rgba(97, 218, 251, 0.1) !important;
+    box-shadow: 0 0 10px rgba(97, 218, 251, 0.3);
+}
+
+.spacecraftName {
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+.spacecraftCapacity {
+    color: #b0b0b0;
+    font-size: 0.9rem;
+}
+
+.noSpacecrafts {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.noSpacecrafts p {
+    color: #666;
+    font-style: italic;
+    margin: 0;
 }
 
 /* Loading & Error Styles */
@@ -59,7 +217,7 @@
     color: #b0b0b0;
 }
 
-/* Modal styles for messages */
+/* Modal styles */
 .messageOverlay {
     position: fixed;
     top: 0;
@@ -110,4 +268,20 @@
 
 .messageButton:hover {
     background-color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .planetsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .instructions {
+        font-size: 1rem;
+    }
+
+    .clearButton {
+        display: block;
+        margin: 0.5rem auto 0;
+    }
 }

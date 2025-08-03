@@ -43,10 +43,13 @@
     transform: translateY(0);
 }
 
+/* FIXED: Proper grid layout with consistent spacing */
 .spacecraftsPage__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+    align-items: start;
+    /* Ensures cards align properly */
 }
 
 /* No data message */
@@ -99,7 +102,7 @@
     color: #b0b0b0;
 }
 
-/* --- Modal Styles --- */
+/* --- FIXED MODAL STYLES --- */
 .modalOverlay,
 .messageOverlay {
     position: fixed;
@@ -112,6 +115,7 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    /* High z-index to appear above everything */
 }
 
 .modal,
@@ -122,6 +126,8 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     max-width: 400px;
     text-align: center;
+    border: 2px solid var(--error-color);
+    /* Red border for visibility */
 }
 
 .modalText,

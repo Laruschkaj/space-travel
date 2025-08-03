@@ -27,4 +27,3 @@ class SpaceTravelApi {
 }
 
 export default SpaceTravelApi;
-

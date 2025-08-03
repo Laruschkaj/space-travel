@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import SpaceTravelApi from '../../services/SpaceTravelApi';
-import PlanetCard from '../../components/PlanetCard/PlanetCard';
 import styles from './PlanetsPage.module.css';
 
 /**
- * Renders a list of planets and allows spacecraft to be dispatched between them.
- * Fetches all planets and spacecraft from the API on load.
+ * Interactive Planets Page with clickable spacecraft and planet selection
  */
 function PlanetsPage() {
     const [planets, setPlanets] = useState([]);
@@ -14,21 +12,21 @@ function PlanetsPage() {
     const [error, setError] = useState(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
+    const [selectedSpacecraft, setSelectedSpacecraft] = useState(null);
 
-    // Function to fetch all data from the API
     const fetchData = async () => {
         setLoading(true);
         setError(null);
 
         try {
-            // Fetch planets
-            const planetsResponse = await SpaceTravelApi.getPlanets();
+            const [planetsResponse, spacecraftsResponse] = await Promise.all([
+                SpaceTravelApi.getPlanets(),
+                SpaceTravelApi.getSpacecrafts()
+            ]);
+
             if (planetsResponse.isError) {
                 throw new Error(planetsResponse.data || 'Failed to load planets.');
             }
-
-            // Fetch spacecrafts
-            const spacecraftsResponse = await SpaceTravelApi.getSpacecrafts();
             if (spacecraftsResponse.isError) {
                 throw new Error(spacecraftsResponse.data || 'Failed to load spacecrafts.');
             }
@@ -43,38 +41,41 @@ function PlanetsPage() {
         }
     };
 
-    // useEffect to fetch data on component mount
     useEffect(() => {
         fetchData();
     }, []);
 
-    // Function to handle spacecraft dispatch
-    const handleDispatch = async (spacecraftId, targetPlanetId) => {
+    const handleSpacecraftSelect = (spacecraft) => {
+        setSelectedSpacecraft(spacecraft);
         setMessage('');
         setIsError(false);
+    };
+
+    const handlePlanetSelect = async (targetPlanet) => {
+        if (!selectedSpacecraft) {
+            setMessage('Please select a spacecraft first.');
+            setIsError(true);
+            return;
+        }
+
+        if (selectedSpacecraft.currentLocation === targetPlanet.id) {
+            setMessage('The spacecraft is already at this planet.');
+            setIsError(true);
+            return;
+        }
+
         try {
-            // Find the selected spacecraft to get its current location
-            const spacecraft = spacecrafts.find(s => s.id === spacecraftId);
-            if (!spacecraft) {
-                throw new Error('Spacecraft not found.');
-            }
-
-            if (spacecraft.currentLocation === Number(targetPlanetId)) {
-                throw new Error("The spacecraft is already at the target planet.");
-            }
-
-            // Call the API to send the spacecraft
             const response = await SpaceTravelApi.sendSpacecraftToPlanet({
-                spacecraftId,
-                targetPlanetId: Number(targetPlanetId)
+                spacecraftId: selectedSpacecraft.id,
+                targetPlanetId: targetPlanet.id
             });
 
             if (response.isError) {
                 throw new Error(response.data || 'Failed to dispatch spacecraft.');
             }
 
-            setMessage('Spacecraft dispatched successfully!');
-            // Refetch data to update the UI with new locations
+            setMessage(`${selectedSpacecraft.name} successfully dispatched to ${targetPlanet.name}!`);
+            setSelectedSpacecraft(null);
             fetchData();
         } catch (err) {
             console.error("Dispatch failed:", err);
@@ -83,12 +84,14 @@ function PlanetsPage() {
         }
     };
 
-    // Function to clear a success or error message
     const clearMessage = () => {
         setMessage('');
     };
 
-    // Render different UI based on component state
+    const clearSelection = () => {
+        setSelectedSpacecraft(null);
+    };
+
     if (loading) {
         return (
             <div className={styles.loadingContainer}>
@@ -109,19 +112,83 @@ function PlanetsPage() {
 
     return (
         <div className={styles.planetsPage}>
-            <h1 className={styles.planetsPage__title}>Planets</h1>
-            <div className={styles.planetsPage__list}>
-                {planets.map((planet) => (
-                    <PlanetCard
-                        key={planet.id}
-                        planet={planet}
-                        allSpacecrafts={spacecrafts}
-                        onDispatch={handleDispatch}
-                    />
-                ))}
+            <h1 className={styles.planetsPage__title}>Planets & Spacecraft Dispatch</h1>
+
+            {/* Instructions */}
+            <div className={styles.instructions}>
+                <p>
+                    <strong>How to dispatch:</strong>
+                    {selectedSpacecraft ? (
+                        <>
+                            Click on a planet to send <strong>{selectedSpacecraft.name}</strong> there.
+                            <button onClick={clearSelection} className={styles.clearButton}>Clear Selection</button>
+                        </>
+                    ) : (
+                        ' Select a spacecraft, then click on a destination planet.'
+                    )}
+                </p>
             </div>
 
-            {/* Custom Message Modal UI */}
+            <div className={styles.planetsGrid}>
+                {planets.map((planet) => {
+                    const stationedSpacecrafts = spacecrafts.filter(sc => sc.currentLocation === planet.id);
+                    const isClickable = selectedSpacecraft && selectedSpacecraft.currentLocation !== planet.id;
+
+                    return (
+                        <div
+                            key={planet.id}
+                            className={`${styles.planetCard} ${isClickable ? styles.planetClickable : ''}`}
+                            onClick={() => isClickable && handlePlanetSelect(planet)}
+                        >
+                            <div className={styles.planetImageContainer}>
+                                <img
+                                    src={planet.pictureUrl}
+                                    alt={planet.name}
+                                    className={styles.planetImage}
+                                />
+                                <div className={styles.planetOverlay}>
+                                    <h2 className={styles.planetName}>{planet.name}</h2>
+                                    <p className={styles.planetPopulation}>
+                                        Population: {planet.currentPopulation.toLocaleString()}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {stationedSpacecrafts.length > 0 && (
+                                <div className={styles.spacecraftsSection}>
+                                    <h4 className={styles.spacecraftsTitle}>Stationed Spacecraft:</h4>
+                                    <div className={styles.spacecraftsList}>
+                                        {stationedSpacecrafts.map((spacecraft) => (
+                                            <div
+                                                key={spacecraft.id}
+                                                className={`${styles.spacecraftItem} ${selectedSpacecraft?.id === spacecraft.id ? styles.selectedSpacecraft : ''
+                                                    }`}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleSpacecraftSelect(spacecraft);
+                                                }}
+                                            >
+                                                <span className={styles.spacecraftName}>{spacecraft.name}</span>
+                                                <span className={styles.spacecraftCapacity}>
+                                                    ({spacecraft.capacity.toLocaleString()})
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {stationedSpacecrafts.length === 0 && (
+                                <div className={styles.noSpacecrafts}>
+                                    <p>No spacecraft stationed</p>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Message Modal */}
             {message && (
                 <div className={styles.messageOverlay}>
                     <div className={`${styles.messageModal} ${isError ? styles.errorModal : styles.successModal}`}>

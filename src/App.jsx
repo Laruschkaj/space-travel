@@ -1,5 +1,7 @@
 import React from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 import HomePage from './pages/HomePage/HomePage';
 import PlanetsPage from './pages/PlanetsPage/PlanetsPage';
 import SpacecraftsPage from './pages/SpacecraftsPage/SpacecraftsPage';
@@ -13,22 +15,7 @@ import styles from './App.module.css';
 function App() {
   return (
     <div className={styles.app}>
-      {/* Navigation Header */}
-      <header className={styles.header}>
-        <nav>
-          <ul className={styles.navList}>
-            <li className={styles.navItem}>
-              <Link to="/" className={styles.navLink}>Home</Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to="/planets" className={styles.navLink}>Planets</Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to="/spacecrafts" className={styles.navLink}>Spacecrafts</Link>
-            </li>
-          </ul>
-        </nav>
-      </header>
+      <Header />
 
       {/* Main content area with routing */}
       <main className={styles.mainContent}>
@@ -42,6 +29,8 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
+
+      <Footer />
     </div>
   );
 }

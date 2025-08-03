@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SpacecraftsPage.module.css';
-
-// Import the API service using the correct default import
 import SpaceTravelApi from '../../services/SpaceTravelApi';
 import SpacecraftCard from '../../components/SpacecraftCard/SpacecraftCard';
 
 /**
  * Renders the page that displays a list of all spacecraft.
- * It fetches data from the API and handles loading, error, and deletion states.
  */
 function SpacecraftsPage() {
     const [spacecrafts, setSpacecrafts] = useState([]);
+    const [planets, setPlanets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -19,37 +17,41 @@ function SpacecraftsPage() {
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
-    // Function to fetch spacecraft data from the API
-    const fetchSpacecrafts = async () => {
+    const fetchData = async () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await SpaceTravelApi.getSpacecrafts();
-            if (response.isError) {
-                throw new Error(response.data || 'Failed to load spacecrafts.');
+            const [spacecraftsResponse, planetsResponse] = await Promise.all([
+                SpaceTravelApi.getSpacecrafts(),
+                SpaceTravelApi.getPlanets()
+            ]);
+
+            if (spacecraftsResponse.isError) {
+                throw new Error(spacecraftsResponse.data || 'Failed to load spacecrafts.');
             }
-            setSpacecrafts(response.data);
+            if (planetsResponse.isError) {
+                throw new Error(planetsResponse.data || 'Failed to load planets.');
+            }
+
+            setSpacecrafts(spacecraftsResponse.data);
+            setPlanets(planetsResponse.data);
             setLoading(false);
         } catch (err) {
-            console.error("Failed to fetch spacecrafts:", err);
+            console.error("Failed to fetch data:", err);
             setError(err.message);
             setLoading(false);
         }
     };
 
-    // useEffect hook to fetch data on component mount
     useEffect(() => {
-        fetchSpacecrafts();
+        fetchData();
     }, []);
 
-    // Function to handle the decommissioning of a spacecraft
     const handleDecommission = (id) => {
-        // Set state to show the confirmation modal
         setDecommissioningId(id);
         setShowConfirm(true);
     };
 
-    // Function to confirm and proceed with decommissioning
     const confirmDecommission = async () => {
         setShowConfirm(false);
         setMessage('');
@@ -59,8 +61,7 @@ function SpacecraftsPage() {
                 if (response.isError) {
                     throw new Error(response.data || 'Failed to decommission spacecraft.');
                 }
-                // After successful deletion, refetch the list to update the UI
-                fetchSpacecrafts();
+                fetchData();
                 setMessage('Spacecraft decommissioned successfully!');
             } catch (err) {
                 console.error("Failed to decommission spacecraft:", err);
@@ -71,23 +72,19 @@ function SpacecraftsPage() {
         }
     };
 
-    // Function to cancel decommissioning
     const cancelDecommission = () => {
         setShowConfirm(false);
         setDecommissioningId(null);
     };
 
-    // Function to clear a success or error message
     const clearMessage = () => {
         setMessage('');
     };
 
-    // Function to navigate to the construction page
     const handleConstruction = () => {
         navigate('/construction');
     };
 
-    // Render different UI based on the component's state
     if (loading) {
         return (
             <div className={styles.loadingContainer}>
@@ -123,6 +120,7 @@ function SpacecraftsPage() {
                         <SpacecraftCard
                             key={spacecraft.id}
                             spacecraft={spacecraft}
+                            planets={planets}
                             onDecommission={handleDecommission}
                         />
                     ))
@@ -131,7 +129,7 @@ function SpacecraftsPage() {
                 )}
             </div>
 
-            {/* Custom Confirmation Modal UI */}
+            {/* Confirmation Modal */}
             {showConfirm && (
                 <div className={styles.modalOverlay}>
                     <div className={styles.modal}>
@@ -144,7 +142,7 @@ function SpacecraftsPage() {
                 </div>
             )}
 
-            {/* Custom Message/Alert UI */}
+            {/* Message Modal */}
             {message && (
                 <div className={styles.messageOverlay}>
                     <div className={styles.messageModal}>

@@ -8,33 +8,47 @@ import styles from './SpacecraftDetailPage.module.css';
  * Fetches the specific spacecraft data based on the URL parameter.
  */
 const SpacecraftDetailPage = () => {
-    // Get the `spacecraftId` from the URL using the useParams hook.
     const { spacecraftId } = useParams();
     const [spacecraft, setSpacecraft] = useState(null);
+    const [planets, setPlanets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // useEffect to fetch data on component mount
+    // Get planet name by ID
+    const getPlanetName = (planetId) => {
+        const planet = planets.find(p => p.id === planetId);
+        return planet ? planet.name : `Planet ${planetId}`;
+    };
+
     useEffect(() => {
-        const fetchSpacecraft = async () => {
+        const fetchData = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await SpaceTravelApi.getSpacecraftById({ id: spacecraftId });
-                if (response.isError) {
-                    throw new Error(response.data || 'Failed to load spacecraft details.');
+                // Fetch spacecraft details
+                const spacecraftResponse = await SpaceTravelApi.getSpacecraftById({ id: spacecraftId });
+                if (spacecraftResponse.isError) {
+                    throw new Error(spacecraftResponse.data || 'Failed to load spacecraft details.');
                 }
-                setSpacecraft(response.data);
+
+                // Fetch planets for location name
+                const planetsResponse = await SpaceTravelApi.getPlanets();
+                if (planetsResponse.isError) {
+                    throw new Error(planetsResponse.data || 'Failed to load planets.');
+                }
+
+                setSpacecraft(spacecraftResponse.data);
+                setPlanets(planetsResponse.data);
                 setLoading(false);
             } catch (err) {
-                console.error("Failed to fetch spacecraft:", err);
+                console.error("Failed to fetch data:", err);
                 setError(err.message);
                 setLoading(false);
             }
         };
 
-        fetchSpacecraft();
-    }, [spacecraftId]); // Rerun effect if the ID changes
+        fetchData();
+    }, [spacecraftId]);
 
     if (loading) {
         return (
@@ -54,7 +68,6 @@ const SpacecraftDetailPage = () => {
         );
     }
 
-    // If no spacecraft is found after loading, display a not found message.
     if (!spacecraft) {
         return (
             <div className={styles.notFoundContainer}>
@@ -66,22 +79,19 @@ const SpacecraftDetailPage = () => {
         );
     }
 
-    // If the spacecraft is found, display its details.
     return (
         <div className={styles.detailPage}>
             <div className={styles.detailCard}>
                 <h1 className={styles.detailTitle}>{spacecraft.name}</h1>
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>ID:</span>
-                    <span className={styles.detailValue}>{spacecraft.id}</span>
-                </div>
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Capacity:</span>
-                    <span className={styles.detailValue}>{spacecraft.capacity.toLocaleString()}</span>
-                </div>
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Current Location:</span>
-                    <span className={styles.detailValue}>Planet {spacecraft.currentLocation}</span>
+                <div className={styles.detailsGrid}>
+                    <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Capacity:</span>
+                        <span className={styles.detailValue}>{spacecraft.capacity.toLocaleString()}</span>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <span className={styles.detailLabel}>Location:</span>
+                        <span className={styles.detailValue}>{getPlanetName(spacecraft.currentLocation)}</span>
+                    </div>
                 </div>
                 <div className={styles.detailDescription}>
                     <h2 className={styles.descriptionTitle}>Description</h2>

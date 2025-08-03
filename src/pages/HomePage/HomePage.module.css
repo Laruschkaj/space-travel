@@ -20,8 +20,9 @@
 
 .homePage__features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .featureCard {
@@ -30,6 +31,7 @@
     padding: 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     transition: transform 0.2s ease;
+    text-align: left;
 }
 
 .featureCard:hover {
@@ -46,4 +48,67 @@
     font-size: 1rem;
     color: var(--secondary-text-color);
     line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.instructionsBox {
+    background-color: rgba(97, 218, 251, 0.05);
+    border: 1px solid rgba(97, 218, 251, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.instructionsTitle {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.instructionsList {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.instructionsList li {
+    margin-bottom: 0.5rem;
+}
+
+.missionStatement {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: left;
+}
+
+.missionTitle {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.missionText {
+    font-size: 1.1rem;
+    color: var(--secondary-text-color);
+    line-height: 1.7;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .homePage__title {
+        font-size: 2.5rem;
+    }
+
+    .homePage__tagline {
+        font-size: 1.2rem;
+    }
+
+    .homePage__features {
+        grid-template-columns: 1fr;
+    }
 }

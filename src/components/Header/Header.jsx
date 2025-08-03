@@ -1,49 +1,45 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'; // Use NavLink for active link styling
-import styles from './Header.module.css'; // Import CSS module
+import { NavLink } from 'react-router-dom';
+import styles from './Header.module.css';
 
-function Header() {
+const Header = () => {
     return (
-        <header className={styles.header}>
-            <nav className={styles.header__nav}>
-                <ul className={styles.header__navList}>
-                    <li className={styles.header__navItem}>
-                        {/* NavLink automatically adds an 'active' class when the route matches */}
+        <nav className={styles.header}>
+            <div className={styles.headerContainer}>
+                <div className={styles.headerContent}>
+                    <div className={styles.logo}>
+                        <span className={styles.logoText}>Space Travel</span>
+                    </div>
+                    <div className={styles.navLinks}>
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
-                                isActive ? `${styles.header__navLink} ${styles['header__navLink--active']}` : styles.header__navLink
+                                `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
                             }
                         >
-                            Home
+                            🏠 Home
                         </NavLink>
-                    </li>
-                    <li className={styles.header__navItem}>
                         <NavLink
                             to="/spacecrafts"
                             className={({ isActive }) =>
-                                isActive ? `${styles.header__navLink} ${styles['header__navLink--active']}` : styles.header__navLink
+                                `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
                             }
                         >
-                            Spacecrafts
+                            🚀 Spacecrafts
                         </NavLink>
-                    </li>
-                    <li className={styles.header__navItem}>
                         <NavLink
                             to="/planets"
                             className={({ isActive }) =>
-                                isActive ? `${styles.header__navLink} ${styles['header__navLink--active']}` : styles.header__navLink
+                                `${styles.navLink} ${isActive ? styles.navLinkActive : ''}`
                             }
                         >
-                            Planets
+                            🌍 Planets
                         </NavLink>
-                    </li>
-                    {/* We won't link directly to /spacecraft/:id or /construction from the header,
-              as they are typically accessed from other pages. */}
-                </ul>
-            </nav>
-        </header>
+                    </div>
+                </div>
+            </div>
+        </nav>
     );
-}
+};
 
 export default Header;
