@@ -1,0 +1,125 @@
+.detailPage {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.detailCard {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    padding: 2rem;
+    width: 100%;
+}
+
+.detailTitle {
+    font-size: 2.5rem;
+    color: #61dafb;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #444;
+    padding-bottom: 1rem;
+}
+
+.detailItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #333;
+}
+
+.detailLabel {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    font-weight: 500;
+}
+
+.detailValue {
+    font-size: 1.1rem;
+    color: #b0b0b0;
+}
+
+.detailDescription {
+    margin-top: 2rem;
+}
+
+.descriptionTitle {
+    font-size: 1.5rem;
+    color: #61dafb;
+    margin-bottom: 1rem;
+}
+
+.descriptionText {
+    font-size: 1rem;
+    color: #b0b0b0;
+    line-height: 1.6;
+}
+
+.backButton {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.backButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Loading & Error Styles (reused from other pages) */
+.loadingContainer,
+.errorContainer,
+.notFoundContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    text-align: center;
+    width: 100%;
+}
+
+.loadingSpinner {
+    border: 4px solid #333;
+    border-top: 4px solid #61dafb;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.errorTitle {
+    color: #e53935;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.errorMessage {
+    color: #b0b0b0;
+}

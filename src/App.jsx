@@ -1,43 +1,47 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom'; // Import Navigate for redirection
-import Header from './components/Header/Header'; // Import Header component
-
-// Import all your page components
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
-import SpacecraftsPage from './pages/SpacecraftsPage/SpacecraftsPage';
-import SpacecraftPage from './pages/SpacecraftPage/SpacecraftPage';
-import ConstructionPage from './pages/ConstructionPage/ConstructionPage';
 import PlanetsPage from './pages/PlanetsPage/PlanetsPage';
+import SpacecraftsPage from './pages/SpacecraftsPage/SpacecraftsPage';
+import SpacecraftDetailPage from './pages/SpacecraftDetailPage/SpacecraftDetailPage';
+import ConstructionPage from './pages/ConstructionPage/ConstructionPage';
+import styles from './App.module.css';
 
-import './App.module.css'; // Global App styles (if any)
-
+/**
+ * Main application component that defines the navigation and routing.
+ */
 function App() {
   return (
-    <div className="App">
-      {/* The Header will be visible on all pages */}
-      <Header />
+    <div className={styles.app}>
+      {/* Navigation Header */}
+      <header className={styles.header}>
+        <nav>
+          <ul className={styles.navList}>
+            <li className={styles.navItem}>
+              <Link to="/" className={styles.navLink}>Home</Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link to="/planets" className={styles.navLink}>Planets</Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link to="/spacecrafts" className={styles.navLink}>Spacecrafts</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-      {/* Define your routes here */}
-      <Routes>
-        {/* Home Page */}
-        <Route path="/" element={<HomePage />} />
-
-        {/* Spacecrafts List Page */}
-        <Route path="/spacecrafts" element={<SpacecraftsPage />} />
-
-        {/* Individual Spacecraft Detail Page (uses a dynamic ID parameter) */}
-        <Route path="/spacecraft/:id" element={<SpacecraftPage />} />
-
-        {/* Spacecraft Construction Page */}
-        <Route path="/construction" element={<ConstructionPage />} />
-
-        {/* Planets List Page */}
-        <Route path="/planets" element={<PlanetsPage />} />
-
-        {/* Redirect unmatched routes to the Home Page */}
-        {/* The '*' path matches any URL not matched by previous routes */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      {/* Main content area with routing */}
+      <main className={styles.mainContent}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/planets" element={<PlanetsPage />} />
+          <Route path="/spacecrafts" element={<SpacecraftsPage />} />
+          <Route path="/spacecrafts/:spacecraftId" element={<SpacecraftDetailPage />} />
+          <Route path="/construction" element={<ConstructionPage />} />
+          {/* Redirect any undefined routes to the home page */}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </main>
     </div>
   );
 }

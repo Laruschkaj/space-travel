@@ -1,7 +1,6 @@
-import {nanoid} from "nanoid";
+import { nanoid } from "nanoid";
 
-class SpaceTravelMockApi
-{
+class SpaceTravelMockApi {
   static MOCK_DB = {
     planets: [
       {
@@ -9,21 +8,18 @@ class SpaceTravelMockApi
         name: "Mercury",
         currentPopulation: 0,
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/8/88/Reprocessed_Mariner_10_image_of_Mercury.jpg"
-
       },
       {
         id: 1,
         name: "Venus",
         currentPopulation: 0,
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Venus_globe.jpg/800px-Venus_globe.jpg"
-
       },
       {
         id: 2,
         name: "Earth",
         currentPopulation: 100000,
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/800px-The_Blue_Marble_%28remastered%29.jpg"
-
       },
       {
         id: 3,
@@ -36,7 +32,6 @@ class SpaceTravelMockApi
         name: "Jupiter",
         currentPopulation: 0,
         pictureUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019.png/800px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019.png"
-
       },
       {
         id: 5,
@@ -63,8 +58,8 @@ class SpaceTravelMockApi
         name: "Prispax",
         capacity: 10000,
         description: "Presenting the Astrolux Odyssey: a revolutionary spacecraft merging cutting-edge technology with lavish luxury, designed to usher 10,000 passengers into the solar system's embrace. A marvel of engineering, its sleek exterior is adorned with solar panels, fueling advanced propulsion while minimizing environmental impact." +
-                     "Within, the vessel transforms into a haven of opulence. Lavish suites offer cosmic panoramas, celestial artwork bedecks lounges, and sprawling gardens thrive in zero-gravity. Culinary excellence reigns in gourmet restaurants, while immersive theaters and VR chambers offer stellar entertainment." +
-                     "Safety remains paramount with cosmic radiation shielding and top-tier medical facilities. The Astrolux Odyssey not only advances space exploration but redefines elegance, uniting humanity's thirst for knowledge with a taste of the sublime.",
+          "Within, the vessel transforms into a haven of opulence. Lavish suites offer cosmic panoramas, celestial artwork bedecks lounges, and sprawling gardens thrive in zero-gravity. Culinary excellence reigns in gourmet restaurants, while immersive theaters and VR chambers offer stellar entertainment." +
+          "Safety remains paramount with cosmic radiation shielding and top-tier medical facilities. The Astrolux Odyssey not only advances space exploration but redefines elegance, uniting humanity's thirst for knowledge with a taste of the sublime.",
         pictureUrl: null,
         currentLocation: 2
       }
@@ -72,54 +67,43 @@ class SpaceTravelMockApi
   };
   static MOCK_DB_KEY = "MOCK_DB";
 
-  static prepareResponse ()
-  {
+  static prepareResponse() {
     return {
       isError: false,
       data: null
     };
   }
 
-  static wait (duration = 1000)
-  {
+  static wait(duration = 1000) {
     return new Promise(resolve => setTimeout(resolve, duration));
   }
 
-  static getMockDb ()
-  {
+  static getMockDb() {
     let mockDb = localStorage.getItem(SpaceTravelMockApi.MOCK_DB_KEY);
 
-    if (!mockDb)
-    {
+    if (!mockDb) {
       localStorage.setItem(SpaceTravelMockApi.MOCK_DB_KEY, JSON.stringify(SpaceTravelMockApi.MOCK_DB));
       mockDb = SpaceTravelMockApi.MOCK_DB;
-    }
-    else
-    {
+    } else {
       mockDb = JSON.parse(mockDb);
     }
 
     return mockDb;
   }
 
-  static setMockDb (mockDb)
-  {
+  static setMockDb(mockDb) {
     localStorage.setItem(SpaceTravelMockApi.MOCK_DB_KEY, JSON.stringify(mockDb));
   }
 
-  static async getPlanets ()
-  {
+  static async getPlanets() {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
+    try {
       const mockDb = SpaceTravelMockApi.getMockDb();
       response.data = mockDb.planets;
-    }
-    catch (error)
-    {
+    } catch (error) {
       response.isError = true;
       response.data = error;
     }
@@ -127,19 +111,15 @@ class SpaceTravelMockApi
     return response;
   }
 
-  static async getSpacecrafts ()
-  {
+  static async getSpacecrafts() {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
+    try {
       const mockDb = SpaceTravelMockApi.getMockDb();
       response.data = mockDb.spacecrafts;
-    }
-    catch (error)
-    {
+    } catch (error) {
       response.isError = true;
       response.data = error;
     }
@@ -147,29 +127,22 @@ class SpaceTravelMockApi
     return response;
   }
 
-  static async getSpacecraftById ({id})
-  {
+  static async getSpacecraftById({ id }) {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
+    try {
       const mockDb = SpaceTravelMockApi.getMockDb();
+      const spacecraft = mockDb.spacecrafts.find(sc => sc.id === id);
 
-      for (let i = 0; i < mockDb.spacecrafts.length; i++)
-      {
-        const spacecraft = mockDb.spacecrafts[i];
-
-        if (spacecraft.id === id)
-        {
-          response.data = spacecraft;
-          break;
-        }
+      if (spacecraft) {
+        response.data = spacecraft;
+      } else {
+        response.isError = true;
+        response.data = 'Spacecraft not found.';
       }
-    }
-    catch (error)
-    {
+    } catch (error) {
       response.isError = true;
       response.data = error;
     }
@@ -177,22 +150,19 @@ class SpaceTravelMockApi
     return response;
   }
 
-  static async buildSpacecraft ({name, capacity, description, pictureUrl = undefined})
-  {
+  static async buildSpacecraft({ name, capacity, description, pictureUrl = undefined }) {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
-      const spacecraft = {id: nanoid(), name, capacity, description, pictureUrl, currentLocation: 2};
+    try {
+      const spacecraft = { id: nanoid(), name, capacity, description, pictureUrl, currentLocation: 2 };
 
       const mockDb = SpaceTravelMockApi.getMockDb();
       mockDb.spacecrafts.push(spacecraft);
       SpaceTravelMockApi.setMockDb(mockDb);
-    }
-    catch (error)
-    {
+      response.data = spacecraft;
+    } catch (error) {
       response.isError = true;
       response.data = error;
     }
@@ -200,29 +170,24 @@ class SpaceTravelMockApi
     return response;
   }
 
-  static async destroySpacecraftById ({id})
-  {
+  static async destroySpacecraftById({ id }) {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
+    try {
       const mockDb = SpaceTravelMockApi.getMockDb();
+      const initialLength = mockDb.spacecrafts.length;
+      mockDb.spacecrafts = mockDb.spacecrafts.filter(sc => sc.id !== id);
 
-      for (let i = 0; i < mockDb.spacecrafts.length; i++)
-      {
-        const spacecraft = mockDb.spacecrafts[i];
-
-        if (spacecraft.id === id)
-        {
-          mockDb.spacecrafts.splice(i, 1);
-          SpaceTravelMockApi.setMockDb(mockDb);
-        }
+      if (mockDb.spacecrafts.length < initialLength) {
+        SpaceTravelMockApi.setMockDb(mockDb);
+        response.data = 'Spacecraft decommissioned.';
+      } else {
+        response.isError = true;
+        response.data = 'Spacecraft not found.';
       }
-    }
-    catch (error)
-    {
+    } catch (error) {
       response.isError = true;
       response.data = error;
     }
@@ -230,59 +195,36 @@ class SpaceTravelMockApi
     return response;
   }
 
-  static async sendSpacecraftToPlanet ({spacecraftId, targetPlanetId})
-  {
+  static async sendSpacecraftToPlanet({ spacecraftId, targetPlanetId }) {
     await SpaceTravelMockApi.wait();
 
     const response = SpaceTravelMockApi.prepareResponse();
 
-    try
-    {
+    try {
       const mockDb = SpaceTravelMockApi.getMockDb();
+      const spacecraft = mockDb.spacecrafts.find(sc => sc.id === spacecraftId);
+      const sourcePlanet = mockDb.planets.find(p => p.id === spacecraft.currentLocation);
+      const targetPlanet = mockDb.planets.find(p => p.id === targetPlanetId);
 
-      for (let i = 0; i < mockDb.spacecrafts.length; i++)
-      {
-        const spacecraft = mockDb.spacecrafts[i];
-
-        if (spacecraft.id === spacecraftId)
-        {
-          if (spacecraft.currentLocation === targetPlanetId)
-          {
-            throw new Error("The spacecraft is already on this planet!");
-          }
-
-          let transferredCapacity = spacecraft.capacity;
-
-          for (const planet of mockDb.planets)
-          {
-            if (planet.id === spacecraft.currentLocation)
-            {
-              if (planet.currentPopulation < transferredCapacity)
-              {
-                transferredCapacity = planet.currentPopulation;
-              }
-
-              planet.currentPopulation -= transferredCapacity;
-            }
-          }
-
-          for (const planet of mockDb.planets)
-          {
-            if (planet.id === targetPlanetId)
-            {
-              planet.currentPopulation += transferredCapacity;
-            }
-          }
-
-          spacecraft.currentLocation = targetPlanetId;
-          SpaceTravelMockApi.setMockDb(mockDb);
-        }
+      if (!spacecraft || !sourcePlanet || !targetPlanet) {
+        throw new Error("Invalid spacecraft or planet.");
       }
-    }
-    catch (error)
-    {
+
+      if (spacecraft.currentLocation === targetPlanetId) {
+        throw new Error("The spacecraft is already on this planet!");
+      }
+
+      let transferredCapacity = Math.min(spacecraft.capacity, sourcePlanet.currentPopulation);
+
+      sourcePlanet.currentPopulation -= transferredCapacity;
+      targetPlanet.currentPopulation += transferredCapacity;
+      spacecraft.currentLocation = targetPlanetId;
+
+      SpaceTravelMockApi.setMockDb(mockDb);
+      response.data = 'Spacecraft dispatched successfully.';
+    } catch (error) {
       response.isError = true;
-      response.data = error;
+      response.data = error.message || error;
     }
 
     return response;

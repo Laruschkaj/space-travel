@@ -1,78 +1,49 @@
-/* src/pages/HomePage/HomePage.module.css */
 .homePage {
-    max-width: 800px;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
-    background-color: #1a1a1a;
-    /* Darker background */
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    padding: 20px;
     text-align: center;
-    color: #e0e0e0;
-    /* Light text for contrast */
-    font-family: 'Inter', sans-serif;
-    /* Use Inter font */
 }
 
 .homePage__title {
-    font-size: 2.5rem;
-    color: #61dafb;
-    /* React blue */
+    font-size: 3.5rem;
+    color: var(--primary-color);
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(97, 218, 251, 0.5);
 }
 
-.homePage__description {
-    font-size: 1.1rem;
+.homePage__tagline {
+    font-size: 1.5rem;
+    color: var(--secondary-text-color);
+    margin-bottom: 3rem;
+}
+
+.homePage__features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.featureCard {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.2s ease;
+}
+
+.featureCard:hover {
+    transform: translateY(-5px);
+}
+
+.featureTitle {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.featureText {
+    font-size: 1rem;
+    color: var(--secondary-text-color);
     line-height: 1.6;
-    margin-bottom: 2rem;
-    color: #b0b0b0;
-}
-
-.homePage__subtitle {
-    font-size: 1.8rem;
-    color: #98c379;
-    /* A pleasant green */
-    margin-top: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.homePage__featuresList {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 2.5rem;
-    text-align: left;
-}
-
-.homePage__featureItem {
-    background-color: #2c2c2c;
-    border-left: 4px solid #007bff;
-    /* Blue accent */
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
-    border-radius: 5px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.homePage__featureItem:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-}
-
-.homePage__featureItem strong {
-    color: #f0f0f0;
-}
-
-.homePage__callToAction {
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #ffcc00;
-    /* A vibrant yellow */
-    margin-top: 3rem;
-    text-shadow: 0 0 5px rgba(255, 204, 0, 0.4);
-}
-
-/* Ensure Inter font is loaded if not already global */
-body {
-    font-family: 'Inter', sans-serif;
 }

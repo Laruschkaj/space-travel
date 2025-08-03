@@ -1,32 +1,30 @@
-// src/pages/HomePage/HomePage.jsx
 import React from 'react';
-import styles from './HomePage.module.css'; // Import CSS module
+import styles from './HomePage.module.css';
 
+/**
+ * HomePage component to provide an overview of the application.
+ */
 function HomePage() {
     return (
         <div className={styles.homePage}>
             <h1 className={styles.homePage__title}>Welcome to Space Travel!</h1>
-            <p className={styles.homePage__description}>
-                In a future where Earth is no longer habitable, you, as a commander, are tasked with the monumental mission of evacuating humanity to new homes across the solar system.
+            <p className={styles.homePage__tagline}>
+                Your premier destination for managing interplanetary travel and spacecraft.
             </p>
-            <h2 className={styles.homePage__subtitle}>Application Functionality:</h2>
-            <ul className={styles.homePage__featuresList}>
-                <li className={styles.homePage__featureItem}>
-                    <strong>Spacecrafts Page:</strong> View all available spacecraft, build new ones, and decommission old ones.
-                </li>
-                <li className={styles.homePage__featureItem}>
-                    <strong>Spacecraft Details:</strong> Get comprehensive information about any specific spacecraft.
-                </li>
-                <li className={styles.homePage__featureItem}>
-                    <strong>Planets Page:</strong> See all habitable planets, the spacecraft currently stationed there, and dispatch spacecraft between planets.
-                </li>
-                <li className={styles.homePage__featureItem}>
-                    <strong>Interplanetary Dispatches:</strong> Strategically move spacecraft to new planets, transferring populations.
-                </li>
-            </ul>
-            <p className={styles.homePage__callToAction}>
-                Embark on this vital mission and secure humanity's future among the stars!
-            </p>
+            <div className={styles.homePage__features}>
+                <div className={styles.featureCard}>
+                    <h2 className={styles.featureTitle}>Planets</h2>
+                    <p className={styles.featureText}>
+                        View all planets in our solar system, their populations, and which spacecraft are stationed on them. Dispatch a spacecraft to a new destination!
+                    </p>
+                </div>
+                <div className={styles.featureCard}>
+                    <h2 className={styles.featureTitle}>Spacecrafts</h2>
+                    <p className={styles.featureText}>
+                        Manage your fleet of spacecraft. Construct new vessels, view detailed information, and decommission old ones.
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }

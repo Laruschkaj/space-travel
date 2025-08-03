@@ -1,57 +1,34 @@
-// src/components/SpacecraftCard/SpacecraftCard.jsx
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './SpacecraftCard.module.css';
 
 /**
- * A reusable component to display a single spacecraft's details.
- * @param {object} props - Component props.
- * @param {object} props.spacecraft - The spacecraft object to display.
- * @param {function} props.onDecommission - Callback function for decommissioning a spacecraft.
+ * A card component to display a single spacecraft's summary.
+ * It includes a link to the detail page and a decommission button.
+ * @param {Object} props
+ * @param {Object} props.spacecraft - The spacecraft object to display.
+ * @param {Function} props.onDecommission - The function to call when the decommission button is clicked.
  */
 function SpacecraftCard({ spacecraft, onDecommission }) {
-    const navigate = useNavigate();
-
-    // Handle a click on the decommission button
-    const handleDecommissionClick = (event) => {
-        // Prevent the parent Link from navigating when the button is clicked
-        event.preventDefault();
-        event.stopPropagation();
-        // Call the parent function to handle decommissioning
-        if (onDecommission) {
-            onDecommission(spacecraft.id);
-        }
-    };
-
     return (
-        // The entire card is a link to the detail page
-        <Link to={`/spacecraft/${spacecraft.id}`} className={styles.card__link}>
-            <div className={styles.card}>
-                <div className={styles.card__imageContainer}>
-                    {/* Display the spacecraft's picture, or a placeholder if none exists */}
-                    <img
-                        src={spacecraft.pictureUrl?.[0] || `https://placehold.co/400x300/2c2c2c/e0e0e0?text=${spacecraft.name}`}
-                        alt={`Picture of ${spacecraft.name}`}
-                        className={styles.card__image}
-                    />
-                </div>
-                <div className={styles.card__content}>
-                    <h3 className={styles.card__title}>{spacecraft.name}</h3>
-                    <p className={styles.card__detail}>
-                        Capacity: <span className={styles.card__detailValue}>{spacecraft.capacity}</span>
-                    </p>
-                    <p className={styles.card__detail}>
-                        Current Location: <span className={styles.card__detailValue}>{spacecraft.currentLocation}</span>
-                    </p>
-                    <button
-                        className={styles.card__decommissionButton}
-                        onClick={handleDecommissionClick}
-                    >
-                        Decommission
-                    </button>
-                </div>
+        <div className={styles.spacecraftCard}>
+            <div className={styles.cardContent}>
+                <h3 className={styles.spacecraftName}>{spacecraft.name}</h3>
+                <p className={styles.spacecraftCapacity}>Capacity: {spacecraft.capacity.toLocaleString()}</p>
+                <p className={styles.spacecraftLocation}>Current Location ID: {spacecraft.currentLocation}</p>
             </div>
-        </Link>
+            <div className={styles.cardActions}>
+                <Link to={`/spacecrafts/${spacecraft.id}`} className={styles.detailsButton}>
+                    View Details
+                </Link>
+                <button
+                    onClick={() => onDecommission(spacecraft.id)}
+                    className={styles.decommissionButton}
+                >
+                    Decommission
+                </button>
+            </div>
+        </div>
     );
 }
 

@@ -1,4 +1,3 @@
-// src/pages/SpacecraftsPage/SpacecraftsPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SpacecraftsPage.module.css';
@@ -24,20 +23,24 @@ function SpacecraftsPage() {
     const fetchSpacecrafts = async () => {
         setLoading(true);
         setError(null);
-        const response = await SpaceTravelApi.getSpacecrafts();
-        if (response.isError) {
-            console.error("Failed to fetch spacecrafts:", response.data);
-            setError(response.data || 'Failed to load spacecrafts.');
-        } else {
+        try {
+            const response = await SpaceTravelApi.getSpacecrafts();
+            if (response.isError) {
+                throw new Error(response.data || 'Failed to load spacecrafts.');
+            }
             setSpacecrafts(response.data);
+            setLoading(false);
+        } catch (err) {
+            console.error("Failed to fetch spacecrafts:", err);
+            setError(err.message);
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     // useEffect hook to fetch data on component mount
     useEffect(() => {
         fetchSpacecrafts();
-    }, []); // Empty dependency array ensures this runs only once
+    }, []);
 
     // Function to handle the decommissioning of a spacecraft
     const handleDecommission = (id) => {
@@ -48,16 +51,22 @@ function SpacecraftsPage() {
 
     // Function to confirm and proceed with decommissioning
     const confirmDecommission = async () => {
+        setShowConfirm(false);
+        setMessage('');
         if (decommissioningId) {
-            setShowConfirm(false);
-            const response = await SpaceTravelApi.destroySpacecraftById({ id: decommissioningId });
-            if (response.isError) {
-                console.error("Failed to decommission spacecraft:", response.data);
-                setMessage(response.data || 'Failed to decommission spacecraft.');
-            } else {
+            try {
+                const response = await SpaceTravelApi.destroySpacecraftById({ id: decommissioningId });
+                if (response.isError) {
+                    throw new Error(response.data || 'Failed to decommission spacecraft.');
+                }
                 // After successful deletion, refetch the list to update the UI
                 fetchSpacecrafts();
                 setMessage('Spacecraft decommissioned successfully!');
+            } catch (err) {
+                console.error("Failed to decommission spacecraft:", err);
+                setMessage(err.message || 'Failed to decommission spacecraft.');
+            } finally {
+                setDecommissioningId(null);
             }
         }
     };

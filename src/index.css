@@ -1,30 +1,119 @@
-/* Import Google Font - Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Global styles for the application */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #61dafb;
+    --bg-color: #282c34;
+    --card-bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --secondary-text-color: #b0b0b0;
+    --error-color: #e53935;
+    --success-color: #4caf50;
+    --button-color: #007bff;
+    --button-hover-color: #0056b3;
+}
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #0d1117;
-    /* Dark background for the whole app */
-    color: #f0f0f0;
-    /* Light text color */
-    line-height: 1.6;
-}
-
-#root {
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
 }
 
-.App {
-    flex-grow: 1;
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+/* Base styles for links and buttons */
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #a4eaff;
+}
+
+/* Utility classes */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Shared modal styles */
+.modalOverlay,
+.messageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    /* Center content horizontally */
+    z-index: 1000;
+}
+
+.modal,
+.messageModal {
+    background-color: var(--card-bg-color);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    text-align: center;
+}
+
+.modalText,
+.messageText {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.messageButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    background-color: #444;
+    color: white;
+}
+
+.messageButton:hover {
+    background-color: #666;
+}
+
+.confirmButton {
+    background-color: var(--error-color);
+    color: white;
+}
+
+.confirmButton:hover {
+    background-color: #c62828;
+}
+
+.cancelButton {
+    background-color: #444;
+    color: white;
+}
+
+.cancelButton:hover {
+    background-color: #666;
 }

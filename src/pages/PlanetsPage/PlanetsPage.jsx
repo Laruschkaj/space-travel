@@ -1,4 +1,3 @@
-// src/pages/PlanetsPage/PlanetsPage.jsx
 import React, { useState, useEffect } from 'react';
 import SpaceTravelApi from '../../services/SpaceTravelApi';
 import PlanetCard from '../../components/PlanetCard/PlanetCard';
@@ -21,27 +20,27 @@ function PlanetsPage() {
         setLoading(true);
         setError(null);
 
-        // Fetch planets
-        const planetsResponse = await SpaceTravelApi.getPlanets();
-        if (planetsResponse.isError) {
-            console.error("Failed to fetch planets:", planetsResponse.data);
-            setError('Failed to load planets.');
-            setLoading(false);
-            return;
-        }
+        try {
+            // Fetch planets
+            const planetsResponse = await SpaceTravelApi.getPlanets();
+            if (planetsResponse.isError) {
+                throw new Error(planetsResponse.data || 'Failed to load planets.');
+            }
 
-        // Fetch spacecrafts
-        const spacecraftsResponse = await SpaceTravelApi.getSpacecrafts();
-        if (spacecraftsResponse.isError) {
-            console.error("Failed to fetch spacecrafts:", spacecraftsResponse.data);
-            setError('Failed to load spacecrafts.');
-            setLoading(false);
-            return;
-        }
+            // Fetch spacecrafts
+            const spacecraftsResponse = await SpaceTravelApi.getSpacecrafts();
+            if (spacecraftsResponse.isError) {
+                throw new Error(spacecraftsResponse.data || 'Failed to load spacecrafts.');
+            }
 
-        setPlanets(planetsResponse.data);
-        setSpacecrafts(spacecraftsResponse.data);
-        setLoading(false);
+            setPlanets(planetsResponse.data);
+            setSpacecrafts(spacecraftsResponse.data);
+            setLoading(false);
+        } catch (err) {
+            console.error("Failed to fetch data:", err);
+            setError(err.message);
+            setLoading(false);
+        }
     };
 
     // useEffect to fetch data on component mount
@@ -53,29 +52,34 @@ function PlanetsPage() {
     const handleDispatch = async (spacecraftId, targetPlanetId) => {
         setMessage('');
         setIsError(false);
+        try {
+            // Find the selected spacecraft to get its current location
+            const spacecraft = spacecrafts.find(s => s.id === spacecraftId);
+            if (!spacecraft) {
+                throw new Error('Spacecraft not found.');
+            }
 
-        // Find the selected spacecraft to get its current location
-        const spacecraft = spacecrafts.find(s => s.id === spacecraftId);
-        if (spacecraft && spacecraft.currentLocation === Number(targetPlanetId)) {
-            setMessage("The spacecraft is already at the target planet.");
-            setIsError(true);
-            return;
-        }
+            if (spacecraft.currentLocation === Number(targetPlanetId)) {
+                throw new Error("The spacecraft is already at the target planet.");
+            }
 
-        // Call the API to send the spacecraft
-        const response = await SpaceTravelApi.sendSpacecraftToPlanet({
-            spacecraftId,
-            targetPlanetId: Number(targetPlanetId)
-        });
+            // Call the API to send the spacecraft
+            const response = await SpaceTravelApi.sendSpacecraftToPlanet({
+                spacecraftId,
+                targetPlanetId: Number(targetPlanetId)
+            });
 
-        if (response.isError) {
-            console.error("Dispatch failed:", response.data);
-            setMessage(response.data || 'Failed to dispatch spacecraft.');
-            setIsError(true);
-        } else {
+            if (response.isError) {
+                throw new Error(response.data || 'Failed to dispatch spacecraft.');
+            }
+
             setMessage('Spacecraft dispatched successfully!');
             // Refetch data to update the UI with new locations
             fetchData();
+        } catch (err) {
+            console.error("Dispatch failed:", err);
+            setMessage(err.message || 'Failed to dispatch spacecraft.');
+            setIsError(true);
         }
     };
 
@@ -111,7 +115,6 @@ function PlanetsPage() {
                     <PlanetCard
                         key={planet.id}
                         planet={planet}
-                        allPlanets={planets}
                         allSpacecrafts={spacecrafts}
                         onDispatch={handleDispatch}
                     />

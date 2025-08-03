@@ -1,4 +1,3 @@
-/* src/pages/PlanetsPage/PlanetsPage.module.css */
 .planetsPage {
     width: 100%;
     max-width: 1400px;
@@ -58,4 +57,57 @@
 
 .errorMessage {
     color: #b0b0b0;
+}
+
+/* Modal styles for messages */
+.messageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.messageModal {
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    text-align: center;
+}
+
+.messageModal.errorModal {
+    border: 2px solid var(--error-color);
+}
+
+.messageModal.successModal {
+    border: 2px solid var(--success-color);
+}
+
+.messageText {
+    color: #e0e0e0;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.messageButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    background-color: #444;
+    color: white;
+}
+
+.messageButton:hover {
+    background-color: #666;
 }
